@@ -1,0 +1,68 @@
+import openai
+
+def parse_resume(resume_text):
+    prompt = f"""
+    You are an AI assistant. Take the provided resume text and parse it into a JSON format with the following structure:
+
+    {{
+        "name": "",
+        "contact_information": {{
+            "email": "",
+            "phone": "",
+            "address": ""
+        }},
+        "summary": "",
+        "experience": [
+            {{
+                "job_title": "",
+                "company": "",
+                "location": "",
+                "start_date": "",
+                "end_date": "",
+                "responsibilities": []
+            }}
+        ],
+        "education": [
+            {{
+                "degree": "",
+                "university": "",
+                "location": "",
+                "graduation_date": ""
+            }}
+        ],
+        "skills": [],
+        "projects": [
+            {{
+                "project_name": "",
+                "description": "",
+                "technologies_used": []
+            }}
+        ],
+        "certifications": [
+            {{
+                "certification_name": "",
+                "issuing_organization": "",
+                "issue_date": ""
+            }}
+        ]
+    }}
+
+    Here is the resume text:
+    {resume_text}
+    """
+
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=prompt,
+        max_tokens=1500
+    )
+
+    return response.choices[0].text.strip()
+
+# Example usage
+if __name__ == "__main__":
+    with open("sample_resume.txt", "r") as file:
+        resume_text = file.read()
+    
+    parsed_resume = parse_resume(resume_text)
+    print(parsed_resume)
